@@ -2,23 +2,88 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Discover Tunisia{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🇹🇳</text></svg>">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; }
 
+            nav {
+                background: #1a3c5e;
+                padding: 0 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: 65px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            }
+            nav .logo {
+                color: white;
+                font-size: 1.4em;
+                font-weight: bold;
+                text-decoration: none;
+                letter-spacing: 1px;
+            }
+            nav ul {
+                list-style: none;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+            nav ul li a {
+                color: #cde;
+                text-decoration: none;
+                padding: 8px 16px;
+                border-radius: 5px;
+                transition: background 0.2s, color 0.2s;
+                font-size: 0.95em;
+            }
+            nav ul li a:hover {
+                background: #e67e22;
+                color: white;
+            }
+            nav ul li a.btn-signup {
+                background: #e67e22;
+                color: white;
+            }
+            nav ul li a.btn-signup:hover {
+                background: #cf6d17;
+            }
+
+            footer {
+                background: #1a3c5e;
+                color: #aac;
+                text-align: center;
+                padding: 20px;
+                margin-top: 60px;
+                font-size: 0.9em;
+            }
+        </style>
+        {% block stylesheets %}{% endblock %}
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
-
-        {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
-        {% if frankenphpHotReload %}
-        <meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
-        <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
-        <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
-        {% endif %}
     </head>
     <body>
+        <nav>
+            <a class="logo" href="/">🇹🇳 Discover Tunisia</a>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/destinations">Destinations</a></li>
+                {% if app.user %}
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register" class="btn-signup">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
         {% block body %}{% endblock %}
+
+        <footer>
+            <p>© 2026 Discover Tunisia — All rights reserved</p>
+        </footer>
     </body>
 </html>

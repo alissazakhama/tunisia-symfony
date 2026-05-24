@@ -1,38 +1,91 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Login - Discover Tunisia{% endblock %}
 
 {% block body %}
+<style>
+    .auth-container {
+        max-width: 420px;
+        margin: 60px auto;
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .auth-container h1 {
+        text-align: center;
+        color: #1a3c5e;
+        margin-bottom: 30px;
+        font-size: 1.8em;
+    }
+    .auth-container label {
+        display: block;
+        margin-bottom: 6px;
+        color: #555;
+        font-weight: 600;
+        font-size: 0.9em;
+    }
+    .auth-container input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1em;
+        margin-bottom: 20px;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .auth-container input:focus { border-color: #1a3c5e; }
+    .auth-container button {
+        width: 100%;
+        padding: 13px;
+        background: #e67e22;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .auth-container button:hover { background: #cf6d17; }
+    .auth-container .bottom-link {
+        text-align: center;
+        margin-top: 20px;
+        color: #777;
+        font-size: 0.9em;
+    }
+    .auth-container .bottom-link a { color: #e67e22; text-decoration: none; }
+    .alert-danger {
+        background: #fee;
+        color: #c0392b;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+    }
+</style>
+
+<div class="auth-container">
+    <h1>🇹🇳 Welcome Back</h1>
+
+    {% if error %}
+        <div class="alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
     <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
-
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
-            </div>
-        {% endif %}
-
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+        <input type="email" value="{{ last_username }}" name="_username" id="username" autocomplete="email" required autofocus>
+
         <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+        <input type="password" name="_password" id="password" autocomplete="current-password" required>
+
         <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-        #}
-
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
+        <button type="submit">Sign In</button>
     </form>
+
+    <div class="bottom-link">
+        Don't have an account? <a href="/register">Sign Up</a>
+    </div>
+</div>
 {% endblock %}
