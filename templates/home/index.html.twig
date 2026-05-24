@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Discover Tunisia{% endblock %}
+
+{% block body %}
+<style>
+    .hero {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/tunisia.jpg') center/cover;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+    }
+    .hero h1 { font-size: 3em; margin-bottom: 10px; }
+    .hero p { font-size: 1.3em; }
+    .hero a {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 30px;
+        background: #e67e22;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 1.1em;
+    }
+    .sections {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        padding: 60px 20px;
+        flex-wrap: wrap;
+    }
+    .section-card {
+        width: 220px;
+        text-align: center;
+        padding: 30px 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #333;
+        transition: transform 0.2s;
+    }
+    .section-card:hover { transform: translateY(-5px); }
+    .section-card h3 { margin-top: 10px; }
+</style>
+
+<div class="hero">
+    <div>
+        <h1>Welcome to Tunisia</h1>
+        <p>Experience the beauty of the Mediterranean and the magic of the Sahara.</p>
+        <a href="/destinations">Explore Destinations</a>
+    </div>
+</div>
+
+<div class="sections">
+    <a class="section-card" href="/destinations">
+        <h3>🏛️ Ancient Cities</h3>
+        <p>Explore the ruins of Carthage and Dougga.</p>
+    </a>
+    <a class="section-card" href="/destinations">
+        <h3>🏜️ Sahara Adventures</h3>
+        <p>Journey into the vast dunes of the Sahara.</p>
+    </a>
+    <a class="section-card" href="/destinations">
+        <h3>🏖️ Beautiful Beaches</h3>
+        <p>Relax on stunning Mediterranean shores.</p>
+    </a>
+    <a class="section-card" href="/destinations">
+        <h3>🍽️ Rich Culture</h3>
+        <p>Savor traditional Tunisian food and heritage.</p>
+    </a>
+</div>
+{% endblock %}
