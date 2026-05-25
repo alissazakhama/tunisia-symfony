@@ -1,9 +1,0 @@
-Highlight images for destination detail pages
-===========================================
-
-Place files in THIS folder: public/images/destinations/highlights/
-
-See the full checklist (all 48 files) in:
-  public/images/destinations/IMAGES_TO_ADD.txt
-
-Until a file is added, the site shows placeholder.svg from the parent folder.

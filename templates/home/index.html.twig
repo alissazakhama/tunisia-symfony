@@ -5,13 +5,34 @@
 {% block body %}
 <style>
     .hero {
-        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/images/tunisia.jpg') center/cover;
+        position: relative;
         height: 500px;
+        overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
         color: white;
+        background: #1a6b8a;
+    }
+    .hero img.hero-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+    }
+    .hero .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.55));
+        z-index: 1;
+    }
+    .hero .hero-inner {
+        position: relative;
+        z-index: 2;
+        padding: 0 20px;
     }
     .hero h1 { font-size: 3em; margin-bottom: 10px; }
     .hero p { font-size: 1.3em; }
@@ -25,51 +46,109 @@
         border-radius: 5px;
         font-size: 1.1em;
     }
+    .hero a:hover { background: #cf6d17; }
+    .experiences-section {
+        background: #b8d9e8;
+        padding: 56px 24px 64px;
+    }
+    .experiences-section h2 {
+        text-align: center;
+        color: #1a3c5e;
+        font-size: 1.6em;
+        margin: 0 0 36px;
+    }
     .sections {
         display: flex;
         justify-content: center;
-        gap: 30px;
-        padding: 60px 20px;
+        gap: 24px;
         flex-wrap: wrap;
+        max-width: 1100px;
+        margin: 0 auto;
     }
     .section-card {
-        width: 220px;
+        width: 240px;
         text-align: center;
-        padding: 30px 20px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
+        padding: 28px 22px 32px;
+        border: 2px solid rgba(255, 255, 255, 0.75);
+        border-radius: 16px;
         text-decoration: none;
-        color: #333;
-        transition: transform 0.2s;
+        color: #1a3c5e;
+        background: rgba(255, 255, 255, 0.35);
+        backdrop-filter: blur(4px);
+        transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        box-shadow: 0 4px 14px rgba(26, 60, 94, 0.08);
     }
-    .section-card:hover { transform: translateY(-5px); }
-    .section-card h3 { margin-top: 10px; }
+    .section-card:hover {
+        transform: translateY(-6px);
+        background: rgba(255, 255, 255, 0.55);
+        box-shadow: 0 8px 24px rgba(26, 60, 94, 0.12);
+    }
+    .section-card .card-emoji {
+        font-size: 2.8rem;
+        display: block;
+        margin-bottom: 12px;
+        line-height: 1;
+    }
+    .section-card .card-image-zone {
+        width: 100%;
+        height: 100px;
+        margin-bottom: 14px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.5);
+    }
+    .section-card .card-image-zone img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .section-card h3 {
+        margin: 0 0 10px;
+        font-size: 1.15em;
+        color: #1a3c5e;
+    }
+    .section-card p {
+        margin: 0;
+        font-size: 0.95em;
+        color: #2d4a63;
+        line-height: 1.5;
+    }
 </style>
 
 <div class="hero">
-    <div>
+    <img
+        class="hero-bg"
+        src="{{ asset(hero_image) }}"
+        alt="Tunisia landscape"
+        onerror="this.onerror=null;this.src='{{ asset(placeholder_image)|e('html_attr') }}';"
+    >
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-inner">
         <h1>Welcome to Tunisia</h1>
         <p>Experience the beauty of the Mediterranean and the magic of the Sahara.</p>
-        <a href="/destinations">Explore Destinations</a>
+        <a href="{{ path('app_destinations') }}">Explore Destinations</a>
     </div>
 </div>
 
-<div class="sections">
-    <a class="section-card" href="/destinations">
-        <h3>🏛️ Ancient Cities</h3>
-        <p>Explore the ruins of Carthage and Dougga.</p>
-    </a>
-    <a class="section-card" href="/destinations">
-        <h3>🏜️ Sahara Adventures</h3>
-        <p>Journey into the vast dunes of the Sahara.</p>
-    </a>
-    <a class="section-card" href="/destinations">
-        <h3>🏖️ Beautiful Beaches</h3>
-        <p>Relax on stunning Mediterranean shores.</p>
-    </a>
-    <a class="section-card" href="/destinations">
-        <h3>🍽️ Rich Culture</h3>
-        <p>Savor traditional Tunisian food and heritage.</p>
-    </a>
-</div>
+<section class="experiences-section">
+    <h2>Explore by experience</h2>
+    <div class="sections">
+        {% for card in experience_cards %}
+            <a class="section-card" href="{{ path('app_experience_show', { id: card.id }) }}">
+                <span class="card-emoji" aria-hidden="true">{{ card.emoji }}</span>
+                <div class="card-image-zone">
+                    <img
+                        src="{{ asset(card.image_path) }}"
+                        alt="{{ card.name }}"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='{{ asset(placeholder_image)|e('html_attr') }}';"
+                    >
+                </div>
+                <h3>{{ card.name }}</h3>
+                <p>{{ card.summary }}</p>
+            </a>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}

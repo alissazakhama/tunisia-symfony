@@ -1,0 +1,248 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ experience.name }} - Discover Tunisia{% endblock %}
+
+{% block body %}
+<style>
+    .destination-hero {
+        position: relative;
+        height: 380px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        background: #1a6b8a;
+    }
+    .destination-hero img.hero-photo {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+    }
+    .destination-hero .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55));
+        z-index: 1;
+    }
+    .destination-hero .hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 0 20px;
+    }
+    .destination-hero h1 { font-size: 3em; margin-bottom: 10px; }
+    .destination-hero .category {
+        background: #e67e22;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9em;
+    }
+    .destination-hero .hero-emoji {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 8px;
+    }
+    .destination-content {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    .destination-content .description {
+        font-size: 1.1em;
+        color: #444;
+        line-height: 1.8;
+        margin-bottom: 40px;
+    }
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+    .info-card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .info-card h3 {
+        color: #1a3c5e;
+        margin-bottom: 15px;
+        font-size: 1.2em;
+    }
+    .highlights-card { padding: 28px 28px 32px; }
+    .highlights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+    }
+    .highlight-item {
+        border: 1px solid #e8edf2;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fafbfc;
+        transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .highlight-item:hover {
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+    }
+    .highlight-image-zone {
+        aspect-ratio: 16 / 10;
+        background: #d0daea;
+        overflow: hidden;
+    }
+    .highlight-image-zone img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .highlight-body { padding: 18px 20px 22px; }
+    .highlight-body h4 {
+        color: #1a3c5e;
+        margin: 0 0 10px;
+        font-size: 1.05em;
+    }
+    .highlight-body p {
+        margin: 0;
+        color: #555;
+        line-height: 1.65;
+        font-size: 0.95em;
+    }
+    .best-time-card { max-width: 420px; }
+    .best-time {
+        background: #1a3c5e;
+        color: white;
+        padding: 6px 15px;
+        border-radius: 20px;
+        display: inline-block;
+        font-size: 0.95em;
+    }
+    .back-btn {
+        display: inline-block;
+        margin-bottom: 30px;
+        color: #e67e22;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .back-btn:hover { text-decoration: underline; }
+    .related-section {
+        margin-top: 20px;
+        padding-top: 36px;
+        border-top: 2px solid #e8edf2;
+    }
+    .related-section h2 {
+        color: #1a3c5e;
+        margin-bottom: 24px;
+    }
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    .related-card {
+        text-decoration: none;
+        color: inherit;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        transition: transform 0.2s;
+    }
+    .related-card:hover { transform: translateY(-4px); }
+    .related-card img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        display: block;
+        background: #d0daea;
+    }
+    .related-card-body { padding: 14px 16px; }
+    .related-card-body h4 {
+        margin: 0 0 6px;
+        color: #1a3c5e;
+        font-size: 1em;
+    }
+    .related-card-body span {
+        font-size: 0.85em;
+        color: #e67e22;
+    }
+</style>
+
+<div class="destination-hero">
+    <img
+        class="hero-photo"
+        src="{{ asset(experience_image) }}"
+        alt="{{ experience.name }}"
+        onerror="this.onerror=null;this.src='{{ asset(placeholder_image)|e('html_attr') }}';"
+    >
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+        <span class="hero-emoji" aria-hidden="true">{{ experience.emoji }}</span>
+        <h1>{{ experience.name }}</h1>
+        <span class="category">{{ experience.category }}</span>
+    </div>
+</div>
+
+<div class="destination-content">
+    <a class="back-btn" href="{{ path('app_home') }}">← Back to Home</a>
+
+    <p class="description">{{ experience.description }}</p>
+
+    <div class="info-grid">
+        <div class="info-card highlights-card">
+            <h3>✨ What to discover</h3>
+            <div class="highlights-grid">
+                {% for highlight in experience.highlights %}
+                    {% set highlight_image = 'images/experiences/highlights/' ~ highlight.image %}
+                    <article class="highlight-item">
+                        <div class="highlight-image-zone">
+                            <img
+                                src="{{ asset(highlight_image) }}"
+                                alt="{{ highlight.title }}"
+                                loading="lazy"
+                                onerror="this.onerror=null;this.src='{{ asset(placeholder_image)|e('html_attr') }}';"
+                            >
+                        </div>
+                        <div class="highlight-body">
+                            <h4>{{ highlight.title }}</h4>
+                            <p>{{ highlight.description }}</p>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="info-card best-time-card">
+            <h3>📅 Best Time to Visit</h3>
+            <span class="best-time">{{ experience.best_time }}</span>
+        </div>
+    </div>
+
+    {% if related_destinations|length > 0 %}
+        <section class="related-section">
+            <h2>Related destinations</h2>
+            <div class="related-grid">
+                {% for dest in related_destinations %}
+                    <a class="related-card" href="{{ path('app_destination_show', { id: dest.id }) }}">
+                        <img
+                            src="{{ asset(dest.image_path) }}"
+                            alt="{{ dest.name }}"
+                            loading="lazy"
+                            onerror="this.onerror=null;this.src='{{ asset(placeholder_image)|e('html_attr') }}';"
+                        >
+                        <div class="related-card-body">
+                            <h4>{{ dest.name }}</h4>
+                            <span>{{ dest.category }}</span>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

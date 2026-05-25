@@ -96,7 +96,7 @@ final class DestinationCatalog
             ],
             'kelibia' => [
                 'name' => 'Kélibia & El Haouaria',
-                'image' => 'kelibia1.jpg',
+                'image' => 'kelibia11.jpg',
                 'description' => 'Located on the Cap Bon peninsula, Kélibia is known for its impressive fortress and crystal-clear waters, while El Haouaria is famous for its falconry festival and Roman caves.',
                 'best_time' => 'May to September',
                 'category' => 'Beach & Historical',
