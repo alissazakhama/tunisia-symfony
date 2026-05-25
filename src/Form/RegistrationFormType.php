@@ -6,17 +6,37 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('username', TextType::class, [
+                'label' => 'Username',
+                'mapped' => false,
+                'attr' => ['placeholder' => 'Choose a display name', 'autocomplete' => 'username'],
+                'constraints' => [
+                    new NotBlank(message: 'Please choose a username'),
+                    new Length(
+                        min: 3,
+                        max: 50,
+                        minMessage: 'Username must be at least {{ limit }} characters',
+                        maxMessage: 'Username cannot be longer than {{ limit }} characters',
+                    ),
+                    new Regex(
+                        pattern: '/^[a-zA-Z0-9_]+$/',
+                        message: 'Username can only contain letters, numbers, and underscores',
+                    ),
+                ],
+            ])
             ->add('email')
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
@@ -27,8 +47,6 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -38,7 +56,6 @@ class RegistrationFormType extends AbstractType
                     new Length(
                         min: 6,
                         minMessage: 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
                         max: 4096,
                     ),
                 ],

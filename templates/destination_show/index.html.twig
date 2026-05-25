@@ -370,7 +370,7 @@
             {% for review in reviews %}
                 <article class="review-item">
                     <div class="review-item-header">
-                        <span class="review-author">{{ review.user.email }}</span>
+                        <span class="review-author">{{ review.user.username }}</span>
                         <span class="review-date">{{ review.createdAt|date('M j, Y') }}</span>
                     </div>
                     <div class="review-stars" aria-label="{{ review.rating }} out of 5">

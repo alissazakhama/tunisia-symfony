@@ -50,6 +50,12 @@
             nav ul li a.btn-signup:hover {
                 background: #cf6d17;
             }
+            .nav-username {
+                color: #8bc;
+                font-size: 0.85em;
+                padding: 8px 6px;
+                font-weight: 600;
+            }
 
             footer {
                 background: #1a3c5e;
@@ -72,6 +78,8 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/destinations">Destinations</a></li>
                 {% if app.user %}
+                    <li><span class="nav-username">👤 {{ app.user.displayName }}</span></li>
+                    <li><a href="{{ path('app_profile') }}">My Profile</a></li>
                     <li><a href="/logout">Logout</a></li>
                 {% else %}
                     <li><a href="/login">Login</a></li>
