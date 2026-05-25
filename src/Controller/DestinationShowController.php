@@ -2,126 +2,52 @@
 
 namespace App\Controller;
 
+use App\Entity\Review;
+use App\Form\ReviewFormType;
+use App\Repository\ReviewRepository;
+use App\Service\DestinationCatalog;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class DestinationShowController extends AbstractController
 {
-    private function getDestinations(): array
+    public function __construct(private readonly DestinationCatalog $destinations)
     {
-        return [
-            'tunis' => [
-                'name' => 'Tunis',
-                'image' => 'tunis-bab-bahr.jpg',
-                'description' => 'The capital city of Tunisia, Tunis is a vibrant mix of ancient medina and modern city life. Explore the UNESCO-listed medina, visit Bardo Museum, and discover the ruins of ancient Carthage nearby.',
-                'highlights' => ['Medina of Tunis', 'Bardo Museum', 'Carthage ruins', 'Sidi Bou Said'],
-                'best_time' => 'Spring and Autumn',
-                'category' => 'City'
-            ],
-            'djerba' => [
-                'name' => 'Djerba',
-                'image' => 'djerba1.jpg',
-                'description' => 'A beautiful island in southern Tunisia known for its white-washed buildings, beautiful beaches, and the famous El Ghriba synagogue — one of the oldest in the world.',
-                'highlights' => ['El Ghriba Synagogue', 'Houmt Souk', 'Beaches', 'Djerba Explore Park'],
-                'best_time' => 'April to October',
-                'category' => 'Island'
-            ],
-            'tozeur' => [
-                'name' => 'Tozeur',
-                'image' => 'tozeur1.jpg',
-                'description' => 'Gateway to the Sahara desert, Tozeur is famous for its unique brick architecture, vast palm groves, and proximity to stunning desert landscapes and salt lakes.',
-                'highlights' => ['Chott el-Djerid', 'Palm Grove', 'Onk Jemel', 'Star Wars filming locations'],
-                'best_time' => 'October to March',
-                'category' => 'Desert'
-            ],
-            'hammamet' => [
-                'name' => 'Hammamet',
-                'image' => 'hammamet1.jpg',
-                'description' => 'One of Tunisia\'s most popular beach resorts, Hammamet offers stunning Mediterranean beaches, a beautiful medina, and a lively tourist scene.',
-                'highlights' => ['Hammamet Beach', 'Old Medina', 'Kasbah', 'Yasmine Hammamet'],
-                'best_time' => 'May to October',
-                'category' => 'Beach'
-            ],
-            'sousse' => [
-                'name' => 'Sousse',
-                'image' => 'sousse.jpg',
-                'description' => 'Known as the "Pearl of the Sahel", Sousse is a major coastal city with a UNESCO-listed medina, beautiful beaches, and a vibrant nightlife.',
-                'highlights' => ['Medina of Sousse', 'Ribat of Sousse', 'Catacombs', 'Port El Kantaoui'],
-                'best_time' => 'April to October',
-                'category' => 'City & Beach'
-            ],
-            'monastir' => [
-                'name' => 'Monastir',
-                'image' => 'imagemonastir.jpg',
-                'description' => 'A charming coastal city famous for its impressive Ribat fortress, beautiful marina, and the mausoleum of former president Habib Bourguiba.',
-                'highlights' => ['Ribat of Monastir', 'Bourguiba Mausoleum', 'Marina', 'Old Medina'],
-                'best_time' => 'April to October',
-                'category' => 'Historical'
-            ],
-            'mahdia' => [
-                'name' => 'Mahdia',
-                'image' => 'mahdia.jpg',
-                'description' => 'A hidden gem on Tunisia\'s coast, Mahdia is known for its authentic medina built on a narrow peninsula, beautiful beaches, and excellent seafood.',
-                'highlights' => ['Cap Afrique', 'Old Medina', 'Skifa el-Kahla gate', 'Beaches'],
-                'best_time' => 'May to September',
-                'category' => 'Beach'
-            ],
-            'tabarka' => [
-                'name' => 'Tabarka',
-                'image' => 'tabarka.jpeg',
-                'description' => 'A coastal town in northwestern Tunisia known for its coral reefs, Genoese fort, and the famous Tabarka Jazz Festival held every summer.',
-                'highlights' => ['Genoese Fort', 'Coral Reefs', 'Jazz Festival', 'Les Aiguilles rocks'],
-                'best_time' => 'June to September',
-                'category' => 'Nature & Beach'
-            ],
-            'bizerte' => [
-                'name' => 'Bizerte',
-                'image' => 'bizerte.jpeg',
-                'description' => 'Tunisia\'s northernmost city, Bizerte has a picturesque old port, beautiful beaches, and is close to Cap Blanc — the northernmost point of Africa.',
-                'highlights' => ['Old Port', 'Kasbah', 'Cap Blanc', 'Bizerte Lake'],
-                'best_time' => 'May to September',
-                'category' => 'City & Beach'
-            ],
-            'kairouan' => [
-                'name' => 'Kairouan',
-                'image' => 'kairouan.jpg',
-                'description' => 'One of the holiest cities in Islam and a UNESCO World Heritage Site, Kairouan is home to the Great Mosque — one of the oldest and most important mosques in North Africa.',
-                'highlights' => ['Great Mosque of Kairouan', 'Medina', 'Aghlabid Basins', 'Mosque of the Three Doors'],
-                'best_time' => 'Spring and Autumn',
-                'category' => 'Historical & Religious'
-            ],
-            'ain-draham' => [
-                'name' => 'Ain Draham',
-                'image' => 'ain_draham.jpeg',
-                'description' => 'A mountain village in northwestern Tunisia surrounded by cork oak forests. Known for its cool climate, it\'s a popular escape from the summer heat and a great hiking destination.',
-                'highlights' => ['Cork oak forests', 'Hunting', 'Hiking trails', 'Mountain views'],
-                'best_time' => 'Spring and Summer',
-                'category' => 'Nature'
-            ],
-            'kelibia' => [
-                'name' => 'Kélibia & El Haouaria',
-                'image' => 'kelibia1.jpg',
-                'description' => 'Located on the Cap Bon peninsula, Kélibia is known for its impressive fortress and crystal-clear waters, while El Haouaria is famous for its falconry festival and Roman caves.',
-                'highlights' => ['Kélibia Fort', 'Crystal clear waters', 'El Haouaria caves', 'Falconry Festival'],
-                'best_time' => 'May to September',
-                'category' => 'Beach & Historical'
-            ],
-        ];
     }
 
     #[Route('/destinations/{id}', name: 'app_destination_show')]
-    public function show(string $id): Response
+    public function show(string $id, ReviewRepository $reviewRepository): Response
     {
-        $destinations = $this->getDestinations();
+        $destination = $this->destinations->get($id);
 
-        if (!isset($destinations[$id])) {
+        if (null === $destination) {
             throw $this->createNotFoundException('Destination not found');
         }
 
+        $reviews = $reviewRepository->findByDestination($id);
+        $averageRating = $reviewRepository->getAverageRating($id);
+        $reviewCount = $reviewRepository->countByDestination($id);
+
+        $reviewForm = null;
+        if ($this->getUser()) {
+            $review = new Review();
+            $review->setDestinationId($id);
+            $reviewForm = $this->createForm(ReviewFormType::class, $review, [
+                'action' => $this->generateUrl('app_destination_review', ['id' => $id]),
+                'method' => 'POST',
+            ]);
+        }
+
         return $this->render('destination_show/index.html.twig', [
-            'destination' => $destinations[$id],
+            'destination' => $destination,
             'id' => $id,
+            'destination_image' => $this->destinations->imageAssetPath($destination['image']),
+            'placeholder_image' => $this->destinations->imageAssetPath('placeholder.svg'),
+            'reviews' => $reviews,
+            'averageRating' => $averageRating,
+            'reviewCount' => $reviewCount,
+            'reviewForm' => $reviewForm,
         ]);
     }
 }

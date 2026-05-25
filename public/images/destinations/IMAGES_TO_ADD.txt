@@ -1,0 +1,107 @@
+Discover Tunisia — image checklist
+================================
+
+MAIN DESTINATION PHOTOS (hero + listing cards)
+  Folder: public/images/destinations/
+
+  [x] tunis-bab-bahr.jpg
+  [x] djerba1.jpg
+  [x] tozeur1.jpg
+  [x] hammamet1.jpg
+  [x] sousse.jpg
+  [x] imagemonastir.jpg
+  [x] mahdia.jpg
+  [x] tabarka.jpeg
+  [x] bizerte.jpeg
+  [x] kairouan.jpg
+  [x] ain_draham.jpeg
+  [x] kelibia1.jpg
+
+HIGHLIGHT PHOTOS (expanded cards on each destination page)
+  Folder: public/images/destinations/highlights/
+  Specs: JPG/JPEG, landscape, at least 800 x 500 px
+  Data: src/Data/DestinationHighlightsData.php
+
+  TUNIS
+  [ ] tunis-medina.jpg
+  [ ] tunis-bardo.jpg
+  [ ] tunis-carthage.jpg
+  [ ] tunis-sidi-bou-said.jpg
+
+  DJERBA
+  [ ] djerba-ghriba.jpg
+  [ ] djerba-houmt-souk.jpg
+  [ ] djerba-beaches.jpg
+  [ ] djerba-explore-park.jpg
+
+  TOZEUR
+  [ ] tozeur-chott.jpg
+  [ ] tozeur-palm-grove.jpg
+  [ ] tozeur-onk-jemel.jpg
+  [ ] tozeur-star-wars.jpg
+
+  HAMMAMET
+  [ ] hammamet-beach.jpg
+  [ ] hammamet-medina.jpg
+  [ ] hammamet-kasbah.jpg
+  [ ] hammamet-yasmine.jpg
+
+  SOUSSE
+  [ ] sousse-medina.jpg
+  [ ] sousse-ribat.jpg
+  [ ] sousse-catacombs.jpg
+  [ ] sousse-port-el-kantaoui.jpg
+
+  MONASTIR
+  [ ] monastir-ribat.jpg
+  [ ] monastir-mausoleum.jpg
+  [ ] monastir-marina.jpg
+  [ ] monastir-medina.jpg
+
+  MAHDIA
+  [ ] mahdia-cap-afrique.jpg
+  [ ] mahdia-medina.jpg
+  [ ] mahdia-skifa.jpg
+  [ ] mahdia-beaches.jpg
+
+  TABARKA
+  [ ] tabarka-fort.jpg
+  [ ] tabarka-reefs.jpg
+  [ ] tabarka-jazz.jpg
+  [ ] tabarka-aiguilles.jpg
+
+  BIZERTE
+  [ ] bizerte-port.jpg
+  [ ] bizerte-kasbah.jpg
+  [ ] bizerte-cap-blanc.jpg
+  [ ] bizerte-lake.jpg
+
+  KAIROUAN
+  [ ] kairouan-great-mosque.jpg
+  [ ] kairouan-medina.jpg
+  [ ] kairouan-basins.jpg
+  [ ] kairouan-three-doors.jpg
+
+  AIN DRAHAM
+  [ ] ain-draham-forests.jpg
+  [ ] ain-draham-hunting.jpg
+  [ ] ain-draham-hiking.jpg
+  [ ] ain-draham-views.jpg
+
+  KELIBIA
+  [ ] kelibia-fort.jpg
+  [ ] kelibia-waters.jpg
+  [ ] kelibia-caves.jpg
+  [ ] kelibia-falconry.jpg
+
+FALLBACK
+  [x] ../placeholder.svg (parent folder — used when any image is missing)
+
+AFTER ADDING FILES
+  Refresh the destination page (e.g. /destinations/tunis). No rebuild required.
+
+TO CHANGE A HIGHLIGHT TITLE OR TEXT
+  Edit src/Data/DestinationHighlightsData.php
+
+TO RENAME AN IMAGE FILE
+  Update the matching "image" field in DestinationHighlightsData.php

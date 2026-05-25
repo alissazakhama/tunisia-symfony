@@ -5,15 +5,45 @@
 {% block body %}
 <style>
     .destination-hero {
-        background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), #1a6b8a;
-        height: 350px;
+        position: relative;
+        height: 380px;
+        overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
         color: white;
+        background: #1a6b8a;
+    }
+    .destination-hero img.hero-photo {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+    }
+    .destination-hero .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55));
+        z-index: 1;
+    }
+    .destination-hero .hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 0 20px;
     }
     .destination-hero h1 { font-size: 3em; margin-bottom: 10px; }
+    .destination-featured-image {
+        width: 100%;
+        max-height: 420px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 28px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        background: #d0daea;
+    }
     .destination-hero .category {
         background: #e67e22;
         padding: 5px 15px;
@@ -33,7 +63,7 @@
     }
     .info-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 30px;
         margin-bottom: 40px;
     }
@@ -46,18 +76,56 @@
     .info-card h3 {
         color: #1a3c5e;
         margin-bottom: 15px;
-        font-size: 1.1em;
+        font-size: 1.2em;
     }
-    .info-card ul {
-        list-style: none;
-        padding: 0;
+    .highlights-card {
+        padding: 28px 28px 32px;
     }
-    .info-card ul li {
-        padding: 6px 0;
+    .highlights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+    }
+    .highlight-item {
+        border: 1px solid #e8edf2;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fafbfc;
+        transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .highlight-item:hover {
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+    }
+    .highlight-image-zone {
+        position: relative;
+        aspect-ratio: 16 / 10;
+        background: #d0daea;
+        overflow: hidden;
+    }
+    .highlight-image-zone img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .highlight-body {
+        padding: 18px 20px 22px;
+    }
+    .highlight-body h4 {
+        color: #1a3c5e;
+        margin: 0 0 10px;
+        font-size: 1.05em;
+    }
+    .highlight-body p {
+        margin: 0;
         color: #555;
-        border-bottom: 1px solid #f0f0f0;
+        line-height: 1.65;
+        font-size: 0.95em;
     }
-    .info-card ul li:before { content: "✓ "; color: #e67e22; }
+    .best-time-card {
+        max-width: 420px;
+    }
     .best-time {
         background: #1a3c5e;
         color: white;
@@ -74,33 +142,248 @@
         font-weight: 600;
     }
     .back-btn:hover { text-decoration: underline; }
+
+    .reviews-section {
+        margin-top: 50px;
+        padding-top: 40px;
+        border-top: 2px solid #e8edf2;
+    }
+    .reviews-section h2 {
+        color: #1a3c5e;
+        margin-bottom: 8px;
+    }
+    .reviews-summary {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
+        color: #555;
+    }
+    .reviews-summary .avg-stars {
+        color: #e67e22;
+        font-size: 1.4em;
+        letter-spacing: 2px;
+    }
+    .reviews-summary .avg-number {
+        font-size: 1.5em;
+        font-weight: 700;
+        color: #1a3c5e;
+    }
+    .flash {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .flash-success { background: #d4edda; color: #155724; }
+    .flash-error { background: #f8d7da; color: #721c24; }
+    .review-form-card {
+        background: white;
+        padding: 28px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        margin-bottom: 36px;
+    }
+    .review-form-card h3 { color: #1a3c5e; margin-bottom: 20px; }
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 4px;
+        margin-bottom: 18px;
+    }
+    .star-rating input { display: none; }
+    .star-rating label {
+        cursor: pointer;
+        font-size: 2rem;
+        color: #ccc;
+        transition: color 0.15s;
+    }
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label {
+        color: #e67e22;
+    }
+    .review-form-card textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #d0daea;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 1em;
+        resize: vertical;
+    }
+    .review-form-card textarea:focus {
+        outline: none;
+        border-color: #1a6b8a;
+    }
+    .review-form-card .form-errors {
+        color: #c0392b;
+        font-size: 0.9em;
+        margin-top: 6px;
+    }
+    .btn-submit-review {
+        margin-top: 16px;
+        background: #e67e22;
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .btn-submit-review:hover { background: #cf6d17; }
+    .login-prompt {
+        background: #eef4f8;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 36px;
+        color: #444;
+    }
+    .login-prompt a { color: #e67e22; font-weight: 600; }
+    .reviews-list { display: flex; flex-direction: column; gap: 16px; }
+    .review-item {
+        background: white;
+        padding: 20px 24px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .review-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    .review-author { font-weight: 600; color: #1a3c5e; }
+    .review-date { font-size: 0.85em; color: #888; }
+    .review-stars { color: #e67e22; letter-spacing: 1px; }
+    .review-comment { color: #444; line-height: 1.6; }
+    .no-reviews { color: #777; font-style: italic; }
 </style>
 
 <div class="destination-hero">
-    <div>
+    <img
+        class="hero-photo"
+        src="{{ asset(destination_image) }}"
+        alt="{{ destination.name }}"
+        onerror="this.onerror=null;this.src='{{ asset(placeholder_image)|e('html_attr') }}';"
+    >
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
         <h1>{{ destination.name }}</h1>
         <span class="category">{{ destination.category }}</span>
     </div>
 </div>
 
 <div class="destination-content">
-    <a class="back-btn" href="/destinations">← Back to Destinations</a>
+    <a class="back-btn" href="{{ path('app_destinations') }}">← Back to Destinations</a>
+
+    <img
+        class="destination-featured-image"
+        src="{{ asset(destination_image) }}"
+        alt="Photo of {{ destination.name }}"
+        onerror="this.onerror=null;this.src='{{ asset(placeholder_image)|e('html_attr') }}';"
+    >
 
     <p class="description">{{ destination.description }}</p>
 
     <div class="info-grid">
-        <div class="info-card">
+        <div class="info-card highlights-card">
             <h3>🏆 Highlights</h3>
-            <ul>
+            <div class="highlights-grid">
                 {% for highlight in destination.highlights %}
-                    <li>{{ highlight }}</li>
+                    {% set highlight_image = 'images/destinations/highlights/' ~ highlight.image %}
+                    <article class="highlight-item">
+                        <div class="highlight-image-zone">
+                            <img
+                                src="{{ asset(highlight_image) }}"
+                                alt="{{ highlight.title }}"
+                                loading="lazy"
+                                onerror="this.onerror=null;this.src='{{ asset(placeholder_image)|e('html_attr') }}';"
+                            >
+                        </div>
+                        <div class="highlight-body">
+                            <h4>{{ highlight.title }}</h4>
+                            <p>{{ highlight.description }}</p>
+                        </div>
+                    </article>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
-        <div class="info-card">
+        <div class="info-card best-time-card">
             <h3>📅 Best Time to Visit</h3>
             <span class="best-time">{{ destination.best_time }}</span>
         </div>
     </div>
+
+    <section class="reviews-section">
+        <h2>Visitor Reviews</h2>
+
+        <div class="reviews-summary">
+            {% if reviewCount > 0 %}
+                <span class="avg-stars" aria-label="{{ averageRating }} out of 5">
+                    {% for i in 1..5 %}
+                        {% if i <= averageRating|round %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                </span>
+                <span class="avg-number">{{ averageRating }}</span>
+                <span>out of 5 · {{ reviewCount }} review{{ reviewCount != 1 ? 's' : '' }}</span>
+            {% else %}
+                <span class="no-reviews">No reviews yet — be the first to share your experience!</span>
+            {% endif %}
+        </div>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label == 'error' ? 'error' : 'success' }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        {% if reviewForm %}
+            <div class="review-form-card">
+                <h3>Leave your review</h3>
+                {{ form_start(reviewForm) }}
+                    <div class="star-rating" role="group" aria-label="Star rating">
+                        {% for child in reviewForm.rating %}
+                            {{ form_widget(child) }}
+                            <label for="{{ child.vars.id }}" title="{{ child.vars.label }}">★</label>
+                        {% endfor %}
+                    </div>
+                    {{ form_errors(reviewForm.rating) }}
+
+                    {{ form_label(reviewForm.comment) }}
+                    {{ form_widget(reviewForm.comment) }}
+                    {{ form_errors(reviewForm.comment) }}
+
+                    <button type="submit" class="btn-submit-review">Submit Review</button>
+                {{ form_end(reviewForm) }}
+            </div>
+        {% else %}
+            <p class="login-prompt">
+                <a href="{{ path('app_login') }}">Log in</a> to leave a star rating and comment.
+            </p>
+        {% endif %}
+
+        <div class="reviews-list">
+            {% for review in reviews %}
+                <article class="review-item">
+                    <div class="review-item-header">
+                        <span class="review-author">{{ review.user.email }}</span>
+                        <span class="review-date">{{ review.createdAt|date('M j, Y') }}</span>
+                    </div>
+                    <div class="review-stars" aria-label="{{ review.rating }} out of 5">
+                        {% for i in 1..5 %}{% if i <= review.rating %}★{% else %}☆{% endif %}{% endfor %}
+                    </div>
+                    <p class="review-comment">{{ review.comment }}</p>
+                </article>
+            {% else %}
+                {% if reviewCount == 0 %}
+                    <p class="no-reviews">Reviews will appear here once visitors share their thoughts.</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </section>
 </div>
 {% endblock %}

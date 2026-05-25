@@ -42,8 +42,14 @@
         transition: transform 0.2s;
     }
     .card:hover { transform: translateY(-5px); }
-    .card img { width: 100%; height: 150px; object-fit: cover; }
-    .card h3 { padding: 10px; text-align: center; }
+    .card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        display: block;
+        background: #d0daea;
+    }
+    .card h3 { padding: 10px; text-align: center; margin: 0; }
 </style>
 
 <div class="page-header">
@@ -56,7 +62,13 @@
 
 <div class="destinations" id="destinationsGrid">
     {% for destination in destinations %}
-    <a class="card" href="/destinations/{{ destination.id }}">
+    <a class="card" href="{{ path('app_destination_show', { id: destination.id }) }}">
+        <img
+            src="{{ asset(destination.image_path) }}"
+            alt="{{ destination.name }}"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='{{ asset(placeholder_image) }}';"
+        >
         <h3>{{ destination.name }}</h3>
     </a>
     {% endfor %}
