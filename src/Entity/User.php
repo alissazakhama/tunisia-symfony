@@ -4,138 +4,85 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[ORM\Table(name: 'users')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(name: 'fullname', type: 'string', length: 50, unique: true)]
+    private string $fullname;
 
-   #[ORM\Column(length: 180)]
-    private ?string $email = null;
+    #[ORM\Column(name: 'email', type: 'string', length: 100, unique: true)]
+    private string $email;
 
-    #[ORM\Column(length: 50)]
-    private ?string $username = null;
+    #[ORM\Column(name: 'password', type: 'string', length: 255)]
+    private string $password;
 
-    /**
-     * @var list<string> The user roles
-     */
-    #[ORM\Column]
-    private array $roles = [];
+    // ── Required by UserInterface ──────────────────────────────
 
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
-    private ?string $password = null;
-
-    #[ORM\Column]
-    private bool $isVerified = false;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-   public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getDisplayName(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): static
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return $this->email; // what Symfony uses to identify the user
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return ['ROLE_USER'];
     }
 
-    /**
-     * @param list<string> $roles
-     */
-    public function setRoles(array $roles): static
+    public function eraseCredentials(): void
     {
-        $this->roles = $roles;
-
-        return $this;
+        // clear any temporary sensitive data here if needed
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
-    public function getPassword(): ?string
+    // ── Required by PasswordAuthenticatedUserInterface ─────────
+
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
+    // ── Getters & Setters ──────────────────────────────────────
 
+    public function getFullname(): string
+    {
+        return $this->fullname;
+    }
+
+    public function setFullname(string $fullname): self
+    {
+        $this->fullname = $fullname;
         return $this;
     }
 
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
-    public function __serialize(): array
+    public function getEmail(): string
     {
-        $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
-
-        return $data;
+        return $this->email;
     }
 
-    public function isVerified(): bool
+    public function setEmail(string $email): self
     {
-        return $this->isVerified;
+        $this->email = $email;
+        return $this;
     }
 
-    public function setIsVerified(bool $isVerified): static
+    public function setPassword(string $password): self
     {
-        $this->isVerified = $isVerified;
+        $this->password = $password;
+        return $this;
+    }
 
+    public function getUsername(): string
+    {
+        return $this->fullname;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->fullname = $username;
         return $this;
     }
 }

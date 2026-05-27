@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Review;
 use App\Form\ReviewFormType;
+use App\Repository\DestinationRepository;
 use App\Repository\ReviewRepository;
 use App\Service\DestinationCatalog;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,22 +18,24 @@ final class DestinationShowController extends AbstractController
     }
 
     #[Route('/destinations/{id}', name: 'app_destination_show')]
-    public function show(string $id, ReviewRepository $reviewRepository): Response
+    public function show(string $id, ReviewRepository $reviewRepository, DestinationRepository $destinationRepository): Response
     {
-        $destination = $this->destinations->get($id);
+        $destination = $destinationRepository->findBySlug($id);
 
         if (null === $destination) {
             throw $this->createNotFoundException('Destination not found');
         }
 
-        $reviews = $reviewRepository->findByDestination($id);
-        $averageRating = $reviewRepository->getAverageRating($id);
-        $reviewCount = $reviewRepository->countByDestination($id);
+        $destinationId = $destination->getId();
+
+        $reviews = $reviewRepository->findByDestination($destinationId);
+        $averageRating = $reviewRepository->getAverageRating($destinationId);
+        $reviewCount = $reviewRepository->countByDestination($destinationId);
 
         $reviewForm = null;
         if ($this->getUser()) {
             $review = new Review();
-            $review->setDestinationId($id);
+            $review->setDestinationId($destinationId);
             $reviewForm = $this->createForm(ReviewFormType::class, $review, [
                 'action' => $this->generateUrl('app_destination_review', ['id' => $id]),
                 'method' => 'POST',
@@ -42,7 +45,7 @@ final class DestinationShowController extends AbstractController
         return $this->render('destination_show/index.html.twig', [
             'destination' => $destination,
             'id' => $id,
-            'destination_image' => $this->destinations->imageAssetPath($destination['image']),
+            'destination_image' => $this->destinations->imageAssetPath($destination->getHeroImage()),
             'placeholder_image' => $this->destinations->imageAssetPath('placeholder.svg'),
             'reviews' => $reviews,
             'averageRating' => $averageRating,

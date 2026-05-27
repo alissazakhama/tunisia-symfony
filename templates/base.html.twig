@@ -78,8 +78,10 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/destinations">Destinations</a></li>
                 {% if app.user %}
-                    <li><span class="nav-username">👤 {{ app.user.displayName }}</span></li>
-                    <li><a href="{{ path('app_profile') }}">My Profile</a></li>
+                    <li><span class="nav-username">👤 {{ app.user.fullname }}</span></li> {# ← fixed #}
+                    {% if app.user is defined %} {# only show if route exists #}
+                        {# <li><a href="{{ path('app_profile') }}">My Profile</a></li> #}
+                    {% endif %}
                     <li><a href="/logout">Logout</a></li>
                 {% else %}
                     <li><a href="/login">Login</a></li>

@@ -3,12 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\ReviewRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
-#[ORM\Table(name: 'reviews')]
-#[ORM\Index(name: 'idx_reviews_destination', columns: ['destination_id'])]
+#[ORM\Table(name: 'comments')]
+#[ORM\Index(columns: ['destination_id'])]
 class Review
 {
     #[ORM\Id]
@@ -16,68 +15,52 @@ class Review
     #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * Destination slug from the URL (e.g. "tunis", "djerba").
-     */
-    #[ORM\Column(length: 50)]
-    private ?string $destinationId = null;
+   #[ORM\Column(name: 'destination_id', type: 'integer', length: 100)]
+    private ?int $destinationId = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private ?User $user = null;
+    #[ORM\Column(name: 'username', length: 50)]
+    private ?string $username = null;
 
-    #[ORM\Column]
-    private ?int $rating = null;
-
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(name: 'content', type: 'text')]
     private ?string $comment = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(name: 'rating', type: 'integer')]
+    private ?int $rating = null;
+
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $createdAt = null;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTime();
     }
+
+    // ── Getters & Setters ──────────────────────────────────────
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDestinationId(): ?string
+    public function getDestinationId(): ?int
     {
         return $this->destinationId;
     }
 
-    public function setDestinationId(string $destinationId): static
+    public function setDestinationId(int $destinationId): static
     {
         $this->destinationId = $destinationId;
-
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUsername(): ?string
     {
-        return $this->user;
+        return $this->username;
     }
 
-    public function setUser(?User $user): static
+    public function setUsername(string $username): static
     {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getRating(): ?int
-    {
-        return $this->rating;
-    }
-
-    public function setRating(int $rating): static
-    {
-        $this->rating = $rating;
-
+        $this->username = $username;
         return $this;
     }
 
@@ -89,19 +72,28 @@ class Review
     public function setComment(string $comment): static
     {
         $this->comment = $comment;
-
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    public function setRating(int $rating): static
+    {
+        $this->rating = $rating;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 }

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ destination.name }} - Discover Tunisia{% endblock %}
+{% block title %}{{ destination.title }} - Discover Tunisia{% endblock %}
 
 {% block body %}
 <style>
@@ -267,12 +267,12 @@
     <img
         class="hero-photo"
         src="{{ asset(destination_image) }}"
-        alt="{{ destination.name }}"
+        alt="{{ destination.title }}"
         onerror="this.onerror=null;this.src='{{ asset(placeholder_image)|e('html_attr') }}';"
     >
     <div class="hero-overlay" aria-hidden="true"></div>
     <div class="hero-content">
-        <h1>{{ destination.name }}</h1>
+        <h1>{{ destination.title }}</h1>
         <span class="category">{{ destination.category }}</span>
     </div>
 </div>
@@ -283,7 +283,7 @@
     <img
         class="destination-featured-image"
         src="{{ asset(destination_image) }}"
-        alt="Photo of {{ destination.name }}"
+        alt="Photo of {{ destination.title }}"
         onerror="this.onerror=null;this.src='{{ asset(placeholder_image)|e('html_attr') }}';"
     >
 
@@ -314,7 +314,7 @@
         </div>
         <div class="info-card best-time-card">
             <h3>📅 Best Time to Visit</h3>
-            <span class="best-time">{{ destination.best_time }}</span>
+            <span class="best-time">{{ destination.bestTime }}</span>
         </div>
     </div>
 
@@ -370,7 +370,7 @@
             {% for review in reviews %}
                 <article class="review-item">
                     <div class="review-item-header">
-                        <span class="review-author">{{ review.user.username }}</span>
+                        <span class="review-author">{{ review.username }}</span>
                         <span class="review-date">{{ review.createdAt|date('M j, Y') }}</span>
                     </div>
                     <div class="review-stars" aria-label="{{ review.rating }} out of 5">
