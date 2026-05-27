@@ -1,6 +1,6 @@
 -- Star ratings & comments for destination pages
 -- destination_id stores the URL slug (e.g. tunis, djerba) used in /destinations/{id}
-
+SHOW TABLES;
 CREATE TABLE reviews (
     id INT AUTO_INCREMENT NOT NULL,
     destination_id VARCHAR(50) NOT NULL,
