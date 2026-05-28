@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Wishlist{% endblock %}
+
+{% block body %}
+
+<style>
+    .container {
+        padding: 50px;
+    }
+
+    h1 {
+        margin-bottom: 30px;
+        color: #1a3c5e;
+    }
+
+    .wishlist-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .wishlist-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        width: 250px;
+    }
+
+    .wishlist-card p {
+        margin: 0;
+        font-size: 18px;
+    }
+</style>
+
+<div class="container">
+
+    <h1>❤️ My Wishlist</h1>
+
+    <div class="wishlist-grid">
+
+        {% for item in wishlist %}
+            <div class="wishlist-card">
+                <p>
+                    Destination ID:
+                    <strong>{{ item.destinationSlug }}</strong>
+                </p>
+            </div>
+        {% else %}
+            <p>No favorite destinations yet.</p>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}
