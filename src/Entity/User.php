@@ -61,6 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->username;
     }
+    
 
     public function setUsername(string $username): static
     {
@@ -77,6 +78,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
     }
 
     /**
