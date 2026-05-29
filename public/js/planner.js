@@ -296,6 +296,22 @@ function pickTime(type, usedTimes) {
     return slots[slots.length - 1];
 }
 
+// fixit hetha
+function addOneHour(timeStr) {
+    let [time, period] = timeStr.split(" ");
+    let [hour, minute] = time.split(":").map(Number);
+
+    hour++;
+
+    if (hour === 12) {
+        period = period === "AM" ? "PM" : "AM";
+    } else if (hour > 12) {
+        hour = hour - 12;
+    }
+
+    return `${hour}:${String(minute).padStart(2, "0")} ${period}`;
+}
+
 function generatePlanLocal(routeDests) {
     const totalPlaces = routeDests.reduce((s, d) => s + d.places.length, 0);
     let dayBudgets = routeDests.map(d => Math.max(1, Math.round(days * d.places.length / totalPlaces)));
@@ -359,7 +375,9 @@ function generatePlanLocal(routeDests) {
                 else if (["Beach","Leisure"].includes(place.type)) time = "3:00 PM";
                 else if (place.type === "Scenic") time = pi === 0 ? "8:00 AM" : "5:30 PM";
                 else time = pickTime(place.type, usedTimes);
-                if (usedTimes.has(time)) time = `${parseInt(time)+1}:00 ${time.includes("AM")?"AM":"PM"}`;
+                while (usedTimes.has(time)) {
+                    time = addOneHour(time);
+                }
                 usedTimes.add(time);
                 dayPlaces.push({ time, name: place.name, type: place.type, desc: place.desc });
             });
@@ -515,7 +533,7 @@ function renderPlan(plan, routeDests) {
     out.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-//Event listeners
+// Event listeners
 document.getElementById("openPlannerBtn").addEventListener("click", e => {
     e.preventDefault();
     document.getElementById("plannerOverlay").classList.add("open");
